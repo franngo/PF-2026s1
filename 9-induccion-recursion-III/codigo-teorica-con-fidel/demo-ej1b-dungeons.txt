@@ -1,0 +1,101 @@
+1.b. Demostrar: objs . excavar = doblar . objs
+
+prop = ¿objs . excavar = doblar . objs?
+demo =
+Por principio de extensionalidad
+¿para todo d. (objs . excavar) t = (doblar . objs) d?
+Que es equivalente por definición de (.) a
+¿para todo d. objs (excavar t) = doblar (objs d)?
+Sea un d::Dungeon cualquiera. Por principio de inducción en la estructura de d::Dungeon
+caso base) d = Cueva
+¿objs (excavar Cueva) = doblar (objs Cueva)?
+caso ind.) d = Habitacion os di dd
+HI1) ¡objs (excavar di) = doblar (objs di)!
+HI2) ¡objs (excavar dd) = doblar (objs dd)!
+TI) ¿objs (excavar (Habitacion os di dd)) = doblar (objs (Habitacion os di dd))?
+
+Caso base:
+Lado izquierdo:
+objs (excavar Cueva)
+= def de excavar.1
+objs Cueva
+= def de objs.1
+[]
+
+
+lado derecho:
+doblar (objs Cueva)
+= def de objs.1
+doblar []
+= def de doblar.1
+[]
+
+
+Caso recursivo:
+Lado izquierdo:
+objs (excavar (Habitacion os di dd))
+= def de excavar.2
+objs (Habitacion (doblar os) (excavar di) (excavar dd))
+= def de objs.2
+doblar os ++ objs (excavar di) ++ objs (excavar dd)
+= por HI1 y HI2
+doblar os ++ doblar (objs di) ++ doblar (objs dd)
+
+
+lado derecho:
+doblar (objs (Habitacion os di dd))
+= def de objs.2
+doblar (os ++ objs di ++ objs dd)
+= por asociatividad del (++)
+doblar ((os ++ objs di) ++ objs dd)
+= por lema doblar-append
+doblar (os ++ objs di) ++ doblar (objs dd)
+= por lema doblar-append
+doblar os ++ doblar (objs di) ++ doblar (objs dd)
+
+
+---------------------
+LEMA doblar-append
+prop: ¿para todo xs. para todo ys. doblar (xs ++ ys) = doblar xs ++ doblar ys?
+demo =
+Sean un xs::[Objeto] y un ys::[Objeto] cualquiera. Por principio de inducción sobre la estructura de xs::[Objeto]
+caso base) xs = []
+¿doblar ([] ++ ys) = doblar [] ++ doblar ys?
+caso ind.) xs = (z:zs)
+HI) ¡doblar (zs ++ ys) = doblar zs ++ doblar ys!
+TI) ¿doblar ((z:zs) ++ ys) = doblar (z:zs) ++ doblar ys?
+
+*Un mejor nombre para las variables habría sido algo como os en vez de xs/ys/zs
+
+Caso base:
+Lado izquierdo:
+doblar ([] ++ ys)
+= def de (++).1
+doblar ys
+
+
+lado derecho:
+doblar [] ++ doblar ys
+= def de doblar.1
+[] ++ doblar ys
+= def de (++).1
+doblar ys
+
+
+Caso recursivo:
+Lado izquierdo:
+doblar ((z:zs) ++ ys)
+= def de (++).2
+doblar (z : (zs ++ ys))
+= def de doblar.2
+doblarObj z ++ doblar (zs ++ ys)
+= por HI
+doblarObj z ++ doblar zs ++ doblar ys
+
+
+lado derecho:
+doblar (z:zs) ++ doblar ys
+= def de doblar.2
+(doblarObj z ++ doblar zs) ++ doblar ys
+= por asociatividad del (++)
+doblarObj z ++ doblar zs ++ doblar ys

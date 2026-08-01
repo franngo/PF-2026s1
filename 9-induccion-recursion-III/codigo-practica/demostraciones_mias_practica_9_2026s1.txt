@@ -1,0 +1,127 @@
+...
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+
+Demos sobre Tree a:
+
+Ejercicio 3. b.
+
+i. heightT = length . ramaMasLarga (sin plantear casos para el if, como nos pidió Fede)
+demo =
+Por principio de extensionalidad
+¿para todo t. heightT t = (length . ramaMasLarga) t?
+Sea un t::Tree a cualquiera. Por principio de inducción sobre la estructura de t::Tree a
+caso base) t = EmptyT
+¿heightT EmptyT = (length . ramaMasLarga) EmptyT?
+caso ind.) t = NodeT x ti td
+HI1) ¡heightT ti = (length . ramaMasLarga) ti!
+HI2) ¡heightT td = (length . ramaMasLarga) td!
+TI) ¿heightT (NodeT x ti td) = (length . ramaMasLarga) (NodeT x ti td)?
+
+Caso base:
+Lado izquierdo:
+heightT EmptyT
+= def de heightT.1
+0
+
+lado derecho:
+(length . ramaMasLarga) EmptyT
+= def de (.)
+length (ramaMasLarga EmptyT)
+= def de ramaMasLarga.1
+length []
+= def de length.1
+0
+
+
+Caso recursivo:
+Lado izquierdo:
+heightT (NodeT x ti td)
+= def de heightT.2
+1 + max (heightT ti) (heightT td)
+= por HI1
+1 + max ((length . ramaMasLarga) ti) (heightT td)
+= por HI2
+1 + max ((length . ramaMasLarga) ti) ((length . ramaMasLarga) td)
+= def de (.)
+1 + max (length (ramaMasLarga ti)) ((length . ramaMasLarga) td)
+= def de (.)
+1 + max (length (ramaMasLarga ti)) (length (ramaMasLarga td))
+= def de max
+1 + if length (ramaMasLarga ti) > length (ramaMasLarga td)
+        then length (ramaMasLarga ti)
+        else length (ramaMasLarga td)
+= por propiedad f (if b then x else y) = if b then f x else f y
+if length (ramaMasLarga ti) > length (ramaMasLarga td)
+    then 1 + length (ramaMasLarga ti)
+    else 1 + length (ramaMasLarga td)
+
+
+lado derecho:
+(length . ramaMasLarga) (NodeT x ti td)
+= def de (.)
+length (ramaMasLarga (NodeT x ti td))
+= def de ramaMasLarga.2
+length (if length (ramaMasLarga ti) > length (ramaMasLarga td)   
+            then x : ramaMasLarga ti
+            else x : ramaMasLarga td)
+= por propiedad f (if b then x else y) = if b then f x else f y
+if length (ramaMasLarga ti) > length (ramaMasLarga td)
+    then length (x : ramaMasLarga ti)
+    else length (x : ramaMasLarga td)
+= def de lenght.2
+if length (ramaMasLarga ti) > length (ramaMasLarga td)
+    then 1 + length (ramaMasLarga ti)
+    else length (x : ramaMasLarga td)
+= def de length.2
+if length (ramaMasLarga ti) > length (ramaMasLarga td)
+    then 1 + length (ramaMasLarga ti)
+    else 1 + length (ramaMasLarga td)  
+
+
+========================================================================================
+========================================================================================
+
+...
+
+
+========================================================================================
+========================================================================================
+
+PARA REUTILIZAR EN LAS DISTINTAS DEMOS:
+
+caso base) t = EmptyT
+¿ ?
+caso ind.) t = NodeT x ti td
+HI1) ¡ !
+HI2) ¡ !
+TI) ¿ ?
+
+
+Caso base:
+Lado izquierdo:
+
+
+lado derecho:
+
+Caso recursivo:
+Lado izquierdo:
+
+
+lado derecho:
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================

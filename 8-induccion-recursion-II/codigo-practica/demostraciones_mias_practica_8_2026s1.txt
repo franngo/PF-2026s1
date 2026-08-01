@@ -1,0 +1,1730 @@
+Sección I. Ejercicio 2.
+
+a. para todo xs. para todo ys. length (xs ++ ys) = length xs + length ys
+demo =
+Sean xs e ys dos listas cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿length ([] ++ ys) = length [] + length ys?
+caso ind.) xs = (z:zs)
+HI) ¡length (zs ++ ys) = length zs + length ys!
+TI) ¿length ((z:zs) ++ ys) = length (z:zs) + length ys?
+
+Caso base:
+Lado izquierdo:
+length ([] ++ ys)
+= def de (++)
+length ys
+
+lado derecho:
+length [] + length ys
+= def de length
+0 + length ys
+= por aritmética
+length ys
+
+Caso ind.:
+Lado izquierdo:
+length ((z:zs) ++ ys)
+= def de (++)
+length (z : (zs ++ ys))
+= def de length
+1 + length (zs ++ ys)
+= por HI
+1 + length zs + length ys
+
+lado derecho:
+length (z:zs) + length ys
+= def de length
+1 + length zs + length ys
+
+========================================================================================
+========================================================================================
+
+b. count (const True) = length
+demo =
+Por principio de extensionalidad 
+¿para todo xs. count (const True) xs = length xs?
+Sean xs una lista cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿count (const True) [] = length []?
+caso ind.) xs = (z:zs)
+HI) ¡count (const True) zs = length zs!
+TI) ¿count (const True) (z:zs) = length (z:zs)?
+
+Caso base:
+Lado izquierdo:
+count (const True) []
+= def de count
+0
+
+lado derecho:
+length []
+= def de length
+0
+
+Caso ind.:
+Lado izquierdo:
+count (const True) (z:zs)
+= def de count
+unoSi (const True) z + count (const True) zs
+= def de unoSi
+(if const True z
+    then 1
+    else 0) + count (const True) zs
+= def de const
+(if True
+    then 1 
+    else 0) + count (const True) zs
+= por funcionamiento del if
+1 + count (const True) zs
+
+lado derecho:
+length (z:zs)
+= def de length
+1 + length zs
+= por HI
+1 + count (const True) zs
+
+========================================================================================
+========================================================================================
+
+c. elem = any . (==)
+demo =
+Por principio de extensionalidad
+¿para todo x. para todo xs. elem x xs = (any . (==)) x xs?
+Sean un x::a y un xs::[a] cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿elem x [] = (any . (==)) x []?
+caso ind.) xs = (z:zs)
+HI) ¡elem x zs = (any . (==)) x zs!
+TI) ¿elem x (z:zs) = (any . (==)) x (z:zs)?
+
+Caso base:
+Lado izquierdo:
+elem x []
+= def de elem
+False
+
+lado derecho:
+(any . (==)) x []
+= def de (.)
+any ((==) x) []
+= def de any
+False
+
+Caso recursivo:
+Lado izquierdo:
+elem x (z:zs)
+= def de elem
+x==z || elem x zs
+= por HI
+x==z || (any . (==)) x zs
+= def de (.)
+x==z || any ((==) x) zs
+
+lado derecho:
+(any . (==)) x (z:zs)
+= def de (.)
+any ((==) x) (z:zs)
+= def de any
+(==) x z || any ((==) x) zs
+= por equivalencia de operador prefijo con infijo
+x==z || any ((==) x) zs
+
+========================================================================================
+========================================================================================
+
+d. para todo x. any (elem x) = elem x . concat
+demo=
+¿para todo x. para todo xs. any (elem x) xss = (elem x . concat) xss?
+Sean un x::a y un xss::[[a]] cualquiera. Por principio de inducción sobre la estructura de xss::[[a]]
+caso base) xss = []
+¿any (elem x) [] = (elem x . concat) []?
+caso ind.) xss = (zs:zss)
+HI) ¡any (elem x) zss = (elem x . concat) zss!
+TI) ¿any (elem x) (zs:zss) = (elem x . concat) (zs:zss)?
+
+Caso base:
+Lado izquierdo:
+any (elem x) []
+= def de any
+False
+
+lado derecho:
+(elem x . concat) []
+= def de (.)
+elem x (concat [])
+= def de concat
+elem x []
+= def de elem
+False
+
+Caso recursivo:
+Lado izquierdo:
+any (elem x) (zs:zss)
+= def de any
+elem x zs || any (elem x) zss
+= por HI
+elem x zs || (elem x . concat) zss
+= def de (.)
+elem x zs || elem x (concat zss)
+
+lado derecho:
+(elem x . concat) (zs:zss)
+= def de (.)
+elem x (concat (zs:zss))
+= def de concat
+elem x (zs ++ concat zss)
+= lema elem-append
+elem x zs || elem x (concat zss)
+
+----------------
+
+LEMA ELEM-APPEND
+prop: ¿para todo x. para todo xs. para todo ys. elem x (xs ++ ys) = elem x xs || elem x ys?
+demo:
+Sean un x::a, un xs::[a] y un ys::[a] cualquiera. Por inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿elem x ([] ++ ys) = elem x [] || elem x ys?
+caso ind.) xs = (z:zs)
+HI) ¡elem x (zs ++ ys) = elem x zs || elem x ys!
+TI) ¿elem x ((z:zs) ++ ys) = elem x (z:zs) || elem x ys?
+
+Caso base:
+Lado izquierdo:
+elem x ([] ++ ys)
+= def de (++)
+elem x ys
+
+lado derecho:
+elem x [] || elem x ys
+= def de elem
+False || elem x ys
+= por elemento neutro del (||)
+elem x ys
+
+Caso recursivo:
+Lado izquierdo:
+elem x ((z:zs) ++ ys)
+= def de (++)
+elem x (z : (zs ++ ys))
+= def de elem
+x==z || elem x (zs ++ ys)
+= por HI
+x==z || elem x zs || elem x ys
+
+lado derecho:
+elem x (z:zs) || elem x ys
+= def de elem
+x==z || elem x zs || elem x ys
+
+========================================================================================
+========================================================================================
+
+e. para todo xs. para todo ys. subset xs ys = all (flip elem ys) xs
+demo =
+Sean un xs::[a] y un ys::[a] cualquiera. Por principio de inducción sobre la estructrua de xs::[a]
+caso base) xs = []
+¿subset [] ys = all (flip elem ys) []?
+caso ind.) xs = (z:zs)
+HI) ¡subset zs ys = all (flip elem ys) zs!
+TI) ¿subset (z:zs) ys = all (flip elem ys) (z:zs)?
+
+Caso base:
+Lado izquierdo:
+subset [] ys
+= def de subset.1
+True
+
+lado derecho:
+all (flip elem ys) []
+= def de all.1
+True
+
+Caso recursivo:
+Lado izquierdo:
+subset (z:zs) ys
+= def de subset.2
+elem z ys && subset zs ys
+= por HI
+elem z ys && all (flip elem ys) zs
+
+lado derecho:
+all (flip elem ys) (z:zs)
+= def de all.2
+flip elem ys z && all (flip elem ys) zs
+= def de flip
+elem z ys && all (flip elem ys) zs
+
+========================================================================================
+========================================================================================
+
+f. all null = null . concat
+demo =
+Por principio de extensionalidad
+¿para todo xss. all null xss = (null . concat) xss?
+Sea un xss::[[a]] cualquiera. Por inducción sobre la estructura de xss::[[a]]
+caso base) xss = []
+¿all null [] = (null . concat) []?
+caso ind.) xss = (zs:zss)
+HI) ¡all null zss = (null . concat) zss!
+TI) ¿all null (zs:zss) = (null . concat) (zs:zss)?
+
+Caso base:
+Lado izquierdo:
+all null []
+= def de all.1
+True
+
+lado derecho:
+(null . concat) []
+= def de (.)
+null (concat [])
+= def de concat
+null []
+= def de null
+True
+
+Caso recursivo:
+Lado izquierdo:
+all null (zs:zss)
+= def de all.2
+null zs && all null zss
+= por HI
+null zs && (null . concat) zss
+= def de (.)
+null zs && null (concat zss)
+
+lado derecho:
+(null . concat) (zs:zss)
+= def de (.)
+null (concat (zs:zss))
+= def de concat.2
+null (zs ++ concat zss)
+= lema null-append
+null zs && null (concat zss)
+
+----------------
+
+LEMA NULL-APPEND
+prop: ¿para todo xs. para todo ys. null (xs ++ ys) == null xs && null ys?
+demo:
+Sean un xs::[a] y un ys::[a] cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿null ([] ++ ys) == null [] && null ys?
+caso ind.) xs = (z:zs)
+HI) ¡null (zs ++ ys) == null zs && null ys!
+TI) ¿null ((z:zs) ++ ys) == null (z:zs) && null ys?
+
+Caso base:
+Lado izquierdo:
+null ([] ++ ys)
+= def de (++).1
+null ys
+
+lado derecho:
+null [] && null ys
+= def de null.1
+True && null ys
+= por elemento neutro de (&&)
+null ys
+
+Caso recursivo:
+Lado izquierdo:
+null ((z:zs) ++ ys)
+= por def de (++).2
+null (z : (zs ++ ys))
+= por def de null.2
+False
+
+lado derecho:
+null (z:zs) && null ys
+= por def de null.2
+False && null ys
+= por def de (&&).2
+False
+
+========================================================================================
+========================================================================================
+
+g. length = length . reverse
+demo =
+Por principio de extensionalidad.
+¿para todo xs. length xs = (length . reverse) xs?
+Sea un xs::[a] cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿length [] = (length . reverse) []?
+caso ind.) xs = (z:zs)
+HI) ¡length zs = (length . reverse) zs!
+TI) ¿length (z:zs) = (length . reverse) (z:zs)?
+
+Caso base:
+Lado izquierdo:
+length []
+= def de length.1
+0
+
+lado derecho:
+(length . reverse) []
+= def de (.)
+length (reverse [])
+= def de reverse.1
+length []
+= def de length.1
+0
+
+Caso recursivo:
+Lado izquierdo:
+length (z:zs)
+= def de length.2
+1 + length zs
+= por HI
+1 + (length . reverse) zs
+= def de (.)
+1 + length (reverse zs)
+
+lado derecho:
+(length . reverse) (z:zs)
+= def de (.)
+length (reverse (z:zs))
+= def de reverse.2
+length (reverse zs ++ [z])
+= por lema length-append
+length (reverse zs) + length [z]
+= por funcionamiento del (:) y del []
+length (reverse zs) + length (z:[])
+= def de length.2
+length (reverse zs) + 1 + length []
+= def de length.1
+length (reverse zs) + 1 + 0
+= por aritmética (elemento neutro de la suma)
+length (reverse zs) + 1
+= por aritmética (conmutatividad de la suma)
+1 + length (reverse zs)
+
+----------------
+
+LEMA LENGTH-APPEND
+prop: ¿para todo xs. para todo ys. length (xs ++ ys) = length xs + length ys?
+demo:
+Sean un xs::[a] y un ys::[a] cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿length ([] ++ ys) = length [] + length ys?
+caso ind.) xs = (z:zs)
+HI) ¡length (zs ++ ys) = length zs + length ys!
+TI) ¿length ((z:zs) ++ ys) = length (z:zs) + length ys?
+
+Caso base:
+Lado izquierdo:
+length ([] ++ ys)
+= def de (++).1
+length ys
+
+lado derecho:
+length [] + length ys
+= def de length.1
+0 + length ys
+= por aritmética
+length ys
+
+Caso recursivo:
+Lado izquierdo:
+length ((z:zs) ++ ys)
+= def de (++).2
+length (z : (zs ++ ys))
+= def de length.2
+1 + length (zs ++ ys)
+= por HI
+1 + length zs + length ys
+
+lado derecho:
+length (z:zs) + length ys
+= def de length.2
+1 + length zs + length ys
+
+========================================================================================
+========================================================================================
+
+h. para todo xs. para todo ys. reverse (xs ++ ys) = reverse ys ++ reverse xs
+demo =
+Sean un xs::[a] y un ys::[a] cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿reverse ([] ++ ys) = reverse ys ++ reverse []?
+caso ind.) xs = (z:zs)
+HI) ¡reverse (zs ++ ys) = reverse ys ++ reverse zs!
+TI) ¿reverse ((z:zs) ++ ys) = reverse ys ++ reverse (z:zs)?
+
+Caso base:
+Lado izquierdo:
+reverse ([] ++ ys)
+= def de (++).1
+reverse ys
+
+lado derecho:
+reverse ys ++ reverse []
+= def de reverse.1
+reverse ys ++ []
+= por lema append-nil
+reverse ys
+
+Caso recursivo:
+Lado izquierdo:
+reverse ((z:zs) ++ ys)
+= def de (++).2
+reverse (z : (zs ++ ys))
+= def de reverse.2
+reverse (zs ++ ys) ++ [z]
+= por HI
+reverse ys ++ reverse zs ++ [z]
+
+lado derecho:
+reverse ys ++ reverse (z:zs)
+= por def de reverse.2
+reverse ys ++ reverse zs ++ [z]
+
+----------------
+
+LEMA APPEND-NIL:
+prop: ¿para todo xs. xs ++ [] = xs?
+demo = 
+Sea un xs::[a] cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿[] ++ [] = []?
+caso ind.) xs = (z:zs)
+HI) ¡zs ++ [] = zs!
+TI) ¿(z:zs) ++ [] = (z:zs)?
+
+Caso base:
+Lado izquierdo:
+[] ++ []
+= def de (++).1
+[]
+
+lado derecho:
+[]
+
+Caso recursivo:
+Lado izquierdo:
+(z:zs) ++ []
+= def de (++).2
+z : (zs ++ [])
+= por HI
+z : zs
+
+lado derecho:
+z : zs
+
+========================================================================================
+========================================================================================
+
+(asumí que faltaba el para todo p, que no estaba puesto, porque, si no, se estaba referenciando un p inexistente)
+i. para todo xs. para todo ys. para todo p. all p (xs++ys) = all p (reverse xs) && all p (reverse ys)
+demo =
+Sean un xs::[a], un ys::[a] y un p::(a -> Bool) cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿all p ([]++ys) = all p (reverse []) && all p (reverse ys)?
+caso ind.) xs = (z:zs)
+HI) ¡all p (zs++ys) = all p (reverse zs) && all p (reverse ys)!
+TI) ¿all p ((z:zs)++ys) = all p (reverse (z:zs)) && all p (reverse ys)?
+
+Caso base:
+Lado izquierdo:
+all p ([]++ys)
+= def de (++).1
+all p ys
+
+lado derecho:
+all p (reverse []) && all p (reverse ys)
+= def de reverse.1
+all p [] && all p (reverse ys)
+= def de all.1
+True && all p (reverse ys)
+= def de (&&).1
+all p (reverse ys)
+= por lema all-reverse
+all p ys
+
+Caso recursivo:
+Lado izquierdo:
+all p ((z:zs)++ys)
+= def de (++).2
+all p (z : (zs ++ ys))
+= def de all.2
+p z && all p (zs ++ ys)
+= por HI
+p z && all p (reverse zs) && all p (reverse ys)
+
+lado derecho:
+all p (reverse (z:zs)) && all p (reverse ys)
+= def de reverse.2
+all p (reverse zs ++ [z]) && all p (reverse ys)
+= lema all-append
+all p (reverse zs) && all p [z] && all p (reverse ys)
+= por funcionamiento del (:) y []
+all p (reverse zs) && all p (z:[]) && all p (reverse ys)
+= def de all.2
+all p (reverse zs) && p z && all p [] && all p (reverse ys)
+= def de all.1
+all p (reverse zs) && p z && True && all p (reverse ys)
+= por elemento neutro del (&&)
+all p (reverse zs) && p z && all p (reverse ys)
+= por conmutatividad del (&&)
+p z && all p (reverse zs) && all p (reverse ys)
+
+----------------
+
+LEMA ALL-REVERSE:
+prop: ¿para todo xs. para todo p. all p xs = all p (reverse xs)?
+demo =
+Sean un xs::[a] y un p::(a -> Bool) cualquiera. Por principio de inducción en la estructura de xs::[a]
+caso base) xs = []
+¿all p [] = all p (reverse [])?
+caso ind.) xs = (z:zs)
+HI) ¡all p zs = all p (reverse zs)!
+TI) ¿all p (z:zs) = all p (reverse (z:zs))?
+
+Caso base:
+Lado izquierdo:
+all p []
+
+lado derecho:
+all p (reverse [])
+= def de reverse.1
+all p []
+
+Caso recursivo:
+Lado izquierdo:
+all p (z:zs)
+= def de all.2
+p z && all p zs
+= por HI
+p z && all p (reverse zs)
+
+lado derecho:
+all p (reverse (z:zs))
+= def de reverse.2
+all p (reverse zs ++ [z])
+= por lema all-append
+all p (reverse zs) && all p [z]
+= por funcionamiento de (:) y []
+all p (reverse zs) && all p (z:[])
+= def de all.2
+all p (reverse zs) && p z && all p []
+= def de all.1
+all p (reverse zs) && p z && True
+= por elemento neutro del (&&)
+all p (reverse zs) && p z 
+= por conmutatividad del (&&)
+p z && all p (reverse zs)
+
+----------------
+
+LEMA ALL-APPEND
+prop: ¿para todo xs. para todo ys. para todo p. all p (xs ++ ys) = all p xs && all p ys?
+demo = 
+Sean un xs::[a], un ys::[a] y un p::(a -> Bool) cualquiera. Por principio de inducción sobre la estructura de xs::[a]
+caso base) xs = []
+¿all p ([] ++ ys) = all p [] && all p ys?
+caso ind.) xs = (z:zs)
+HI) ¡all p (zs ++ ys) = all p zs && all p ys!
+TI) ¿all p ((z:zs) ++ ys) = all p (z:zs) && all p ys?
+
+Caso base:
+Lado izquierdo:
+all p ([] ++ ys)
+= def de (++).1
+all p ys
+
+lado derecho:
+all p [] && all p ys
+= def de all.1
+True && all p ys
+= por elemento neutro de (&&)
+all p ys
+
+Caso recursivo:
+Lado izquierdo:
+all p ((z:zs) ++ ys)
+= def de (++).2
+all p (z : (zs ++ ys))
+= def de all.2
+p z && all p (zs ++ ys)
+= por HI
+p z && all p zs && all p ys
+
+lado derecho:
+all p (z:zs) && all p ys
+= def de all.2
+p z && all p zs && all p ys
+
+
+========================================================================================
+========================================================================================
+
+j. para todo xs. para todo ys. unzip (zip xs ys) = (xs, ys)
+(en este caso, mostrar que no vale)
+demo =
+CONTRAEJEMPLO:
+Lado izquierdo:
+unzip (zip [1] [])
+= def de zip.2
+unzip []
+= def de unzip.1
+([], [])
+
+lado derecho:
+([1], [])
+
+========================================================================================
+========================================================================================
+
+PARA REUTILIZAR EN LAS DISTINTAS DEMOS:
+
+caso base) xs = []
+¿ ?
+caso ind.) xs = (z:zs)
+HI) ¡ !
+TI) ¿ ?
+
+
+Caso base:
+Lado izquierdo:
+
+
+lado derecho:
+
+Caso recursivo:
+Lado izquierdo:
+
+
+lado derecho:
+
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+
+Sección II. Ejercicio 1.b.
+
+i. para todo n1. para todo n2. evalN (addN n1 n2) = evalN n1 + evalN n2
+demo =
+Sean un n1::N y un n2::N cualquiera. Por principio de inducción en la estructura de n1::N
+caso base) n = Z
+¿evalN (addN Z n2) = evalN Z + evalN n2?
+caso ind.) n = (S n')
+HI) ¡evalN (addN n' n2) = evalN n' + evalN n2!
+TI) ¿evalN (addN (S n') n2) = evalN (S n') + evalN n2?
+
+Caso base:
+Lado izquierdo:
+evalN (addN Z n2)
+= def de addN.1
+evalN n2
+
+lado derecho:
+evalN Z + evalN n2
+= def de evalN.1
+0 + evalN n2
+= por aritmética
+evalN n2
+
+Caso recursivo:
+Lado izquierdo:
+evalN (addN (S n') n2)
+= def de addN.2
+evalN (S (addN n' n2))
+= def de evalN.2
+1 + evalN (addN n' n2)
+= por HI
+1 + evalN n' + evalN n2
+
+lado derecho:
+evalN (S n') + evalN n2
+= def de evalN.2
+1 + evalN n' + evalN n2
+
+========================================================================================
+========================================================================================
+
+ii. para todo n1. para todo n2. evalN (prodN n1 n2) = evalN n1 * evalN n2
+demo = 
+Sean un n1::N y un n2::N cualquiera. Por principio de inducción en la estructura de n1::N
+caso base) n = Z
+¿evalN (prodN Z n2) = evalN Z * evalN n2?
+caso ind.) n = (S n')
+HI) ¡evalN (prodN n' n2) = evalN n' * evalN n2!
+TI) ¿evalN (prodN (S n') n2) = evalN (S n') * evalN n2?
+
+Caso base:
+Lado izquierdo:
+evalN (prodN Z n2)
+= def de prodN.1
+evalN Z
+= def de evalN.1
+0
+
+lado derecho:
+evalN Z * evalN n2
+= def de evalN.1
+0 * evalN n2
+= por aritmética
+0
+
+Caso recursivo:
+Lado izquierdo:
+evalN (prodN (S n') n2)
+= def de prodN.2
+evalN (addN n2 (prodN n' n2))
+= por propiedad demostrada en i.
+evalN n2 + evalN (prod n' n2)
+= por HI
+evalN n2 + evalN n' * evalN n2
+
+lado derecho:
+evalN (S n') * evalN n2
+= def de evalN.2
+(1 + evalN n') * evalN n2
+= por aritmética
+(1 * evalN n2) + (evalN n' * evalN n2)
+= por aritmética (elemento neutro de la multiplicación entre enteros)
+evalN n2 + evalN n' * evalN n2
+
+
+========================================================================================
+========================================================================================
+
+iii. int2N . evalN = id
+demo = 
+Por principio de extensionalidad
+¿para todo n. (int2N . evalN) n = id n?
+Sea un n::N cualquiera. Por principio de inducción sobre la estructura de n::N
+caso base) n = Z
+¿(int2N . evalN) Z = id Z?
+caso ind.) n = (S n')
+HI) ¡(int2N . evalN) n' = id n'!
+TI) ¿(int2N . evalN) (S n') = id (S n')?
+
+Caso base:
+Lado izquierdo:
+(int2N . evalN) Z
+= def de (.)
+int2N (evalN Z)
+= def de evalN.1
+int2N 0
+= def de int2N.1
+Z
+
+lado derecho:
+id Z
+= def de id
+Z
+
+Caso recursivo:
+Lado izquierdo:
+(int2N . evalN) (S n')
+= def de (.)
+int2N (evalN (S n'))
+= def de evalN.2
+int2N (1 + evalN n')
+= def de int2N, con n<-(1 + evalN n')
+S (int2N (evalN n'))
+= por def de (.)
+S ((int2N . evalN) n')
+= por HI
+S (id n')
+= def de id
+S n'
+
+lado derecho:
+id (S n')
+= def de id
+S n'
+
+========================================================================================
+========================================================================================
+
+iv. evalN . int2N = id
+demo = 
+Por principio de extensionalidad
+¿para todo n. (evalN . int2N) n = id n?
+Sea un n::Int cualquiera. Por principio de inducción sobre la estructura de n::Int
+caso base) n = 0
+¿(evalN . int2N) 0 = id 0?
+caso ind.) n = n
+HI) ¡(evalN . int2N) (n-1) = id (n-1)!
+TI) ¿(evalN . int2N) n = id n?
+
+Caso base:
+Lado izquierdo:
+(evalN . int2N) 0
+= def de (.)
+evalN (int2N 0)
+= def de int2N.1
+evalN Z
+= def de evalN.1
+0
+
+lado derecho:
+id 0
+= def de id
+0
+
+Caso recursivo:
+Lado izquierdo:
+(evalN . int2N) n
+= def de (.)
+evalN (int2N n)
+= def de int2N.2
+evalN (S (int2N (n-1)))
+= def de evalN.2
+1 + evalN (int2N (n-1))
+= def de (.)
+1 + (evalN . int2N) (n-1)
+= por HI
+1 + id (n-1)
+= def de id
+1 + n - 1
+= por aritmética
+n
+
+lado derecho:
+id n
+= def de id
+n
+
+========================================================================================
+========================================================================================
+
+PARA REUTILIZAR EN LAS DISTINTAS DEMOS:
+
+caso base) n = Z
+¿ ?
+caso ind.) n = (S n')
+HI) ¡ !
+TI) ¿ ?
+
+
+Caso base:
+Lado izquierdo:
+
+
+lado derecho:
+
+Caso recursivo:
+Lado izquierdo:
+
+
+lado derecho:
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+
+Sección II. Ejercicio 2.b.
+
+i. evalNU . succNU = (+1) . evalNU
+demo = 
+Por principio de extensionalidad
+¿para todo n. (evalNU . succNU) n = ((+1) . evalNU) n?
+Sea un n::NU cualquiera. Por principio de inducción sobre la estructura de n::NU
+caso base) n = []
+¿(evalNU . succNU) [] = ((+1) . evalNU) []?
+caso ind.) n = (u:us)
+HI) ¡(evalNU . succNU) us = ((+1) . evalNU) us!
+TI) ¿(evalNU . succNU) (u:us) = ((+1) . evalNU) (u:us)?
+
+Caso base:
+Lado izquierdo:
+(evalNU . succNU) []
+= def de (.)
+evalNU (succNU [])
+= def de succNU
+evalNU (() : [])
+= def de evalNU.2
+1 + evalNU []
+= def de evalNU.1
+1 + 0
+= por aritmética
+1
+
+lado derecho:
+((+1) . evalNU) []
+= def de (.)
+(+1) (evalNU [])
+= def de evalNU.1
+(+1) 0
+= def de (+)
+0 + 1
+= por aritmética
+1
+
+Caso recursivo:
+Lado izquierdo:
+(evalNU . succNU) (u:us)
+= def de (.)
+evalNU (succNU (u:us))
+= def de succNU
+evalNU (():u:us)
+= def de evalNU.2
+1 + evalNU (u:us)
+= def de evalNU.2
+1 + 1 + evalNU us
+
+lado derecho:
+((+1) . evalNU) (u:us)
+= def de (.)
+(+1) (evalNU (u:us))
+= def de evalNU.2
+(+1) (1 + evalNU us)
+= por aritmética
+(+1) (evalNU us + 1)
+= def de (+)
+(+1) ((+1) (evalNU us))
+= def de (.)
+(+1) (((+1) . evalNU) us)
+= por HI
+(+1) ((evalNU . succNU) us)
+= def de (.)
+(+1) (evalNU (succNU us))
+= def de succNU
+(+1) (evalNU (() : us))
+= def de evalNU.2
+(+1) (1 + evalNU us)
+= def de (+)
+1 + evalNU us + 1
+= por aritmética
+1 + 1 + evalNU us
+
+========================================================================================
+========================================================================================
+
+ii. para todo n1. para todo n2. evalNU (addNU n1 n2) = evalNU n1 + evalNU n2
+demo = 
+Sean un n1::NU y un n2::NU cualquiera. Por principio de inducción sobre la estructura de n1::NU
+caso base) n1 = []
+¿evalNU (addNU [] n2) = evalNU [] + evalNU n2?
+caso ind.) n1 = (u:us)
+HI) ¡evalNU (addNU us n2) = evalNU us + evalNU n2!
+TI) ¿evalNU (addNU (u:us) n2) = evalNU (u:us) + evalNU n2?
+
+Caso base:
+Lado izquierdo:
+evalNU (addNU [] n2)
+= def de addNU.1
+evalNU n2
+
+lado derecho:
+evalNU [] + evalNU n2
+= def de evalNU.1
+0 + evalNU n2
+= por aritmética (elemento neutro de la suma)
+evalNU n2
+
+Caso recursivo:
+Lado izquierdo:
+evalNU (addNU (u:us) n2)
+= def de addNU.2
+evalNU (u : addNU us n2)
+= def de evalNU.2
+1 + evalNU (addNU us n2)
+= por HI
+1 + evalNU us + evalNU n2
+
+lado derecho:
+evalNU (u:us) + evalNU n2
+= def de evalNU.2
+1 + evalNU us + evalNU n2
+
+========================================================================================
+========================================================================================
+
+iii. nu2n . n2nu = id
+demo =
+Por principio de extensionalidad
+¿para todo n. (nu2n . n2nu) n = id n?
+Sea un n::N cualquiera. Por principio de inducción sobre la estructura de n::N
+caso base) n = Z
+¿(nu2n . n2nu) Z = id Z?
+caso ind.) n = (S n')
+HI) ¡(nu2n . n2nu) n' = id n'!
+TI) ¿(nu2n . n2nu) (S n') = id (S n')?
+
+Caso base:
+Lado izquierdo:
+(nu2n . n2nu) Z
+= def de (.)
+nu2n (n2nu Z)
+= def de n2nu.1
+nu2n []
+= def de nu2n.1
+Z
+
+lado derecho:
+id Z
+= def de id
+Z
+
+Caso recursivo:
+Lado izquierdo:
+(nu2n . n2nu) (S n')
+= def de (.)
+nu2n (n2nu (S n'))
+= def de n2nu.2
+nu2n (() : n2nu n')
+= def de nu2n.2
+S (nu2n (n2nu n'))
+= def de (.)
+S ((nu2n . n2nu) n')
+= por HI
+S (id n')
+= def de id
+S n'
+
+lado derecho:
+id (S n')
+= def de id
+S n'
+
+========================================================================================
+========================================================================================
+
+iv. n2nu . nu2n = id
+demo = 
+Por principio de extensionalidad
+¿para todo n. (n2nu . nu2n) n = id n?
+Sea un n::NU cualquiera. Por principio de inducción sobre la estructura de n::NU
+caso base) n = []
+¿(n2nu . nu2n) [] = id []?
+caso ind.) n = (():us)
+HI) ¡(n2nu . nu2n) us = id us!
+TI) ¿(n2nu . nu2n) (():us) = id (():us)?
+
+Caso base:
+Lado izquierdo:
+(n2nu . nu2n) []
+= def de (.)
+n2nu (nu2n [])
+= def de nu2n.1
+n2nu Z
+= def de n2nu.1
+[]
+
+lado derecho:
+id []
+= def de id
+[]
+
+Caso recursivo:
+Lado izquierdo:
+(n2nu . nu2n) (():us)
+= def de (.)
+n2nu (nu2n (():us))
+= def de nu2n.2
+n2nu (S (nu2n us))
+= def de n2nu.2
+() : n2nu (nu2n us)
+= def de (.)
+() : (n2nu . nu2n) us
+= por HI
+() : id us
+= def de id
+() : us
+
+lado derecho:
+id (():us)
+= def de id
+() : us
+
+========================================================================================
+========================================================================================
+
+PARA REUTILIZAR EN LAS DISTINTAS DEMOS:
+
+caso base) n = []
+¿ ?
+caso ind.) n = (u:us)
+HI) ¡ !
+TI) ¿ ?
+
+
+Caso base:
+Lado izquierdo:
+
+
+lado derecho:
+
+Caso recursivo:
+Lado izquierdo:
+
+
+lado derecho:
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+
+Sección II. Ejercicio 3.b.
+
+i. evalNB . normalizarNB = evalNB
+demo =
+Por principio de extensionalidad.
+¿para todo n. (evalNB . normalizarNB) n = evalNB n?
+Sea un n::NBin cualquiera. Por principio de inducción sobre la estructura de n::NBin
+caso base) n = []
+¿(evalNB . normalizarNB) [] = evalNB []?
+caso ind.) n = (d:ds)
+HI) ¡(evalNB . normalizarNB) ds = evalNB ds!
+TI) ¿(evalNB . normalizarNB) (d:ds) = evalNB (d:ds)?
+
+Caso base:
+Lado izquierdo:
+(evalNB . normalizarNB) []
+= def de (.)
+evalNB (normalizarNB [])
+= def de normalizarNB.1
+evalNB []
+
+lado derecho:
+evalNB []
+
+Caso recursivo:
+Lado izquierdo:
+(evalNB . normalizarNB) (d:ds)
+= def de (.)
+evalNB (normalizarNB (d:ds)
+= def de normalizarNB.2
+evalNB (normDB d (normalizarNB ds))
+= por lema eval-normDB
+dbAsInt d + 2 * evalNB (normalizarNB ds)
+
+lado derecho:
+evalNB (d:ds)
+= def de evalNB.2
+dbAsInt d + 2 * evalNB ds
+= por HI
+dbAsInt d + 2 * (evalNB . normalizarNB) ds
+= def de (.)
+dbAsInt d + 2 * evalNB (normalizarNB ds)
+
+----------------
+Lema eval-normDB
+prop: ¿para todo d. para todo ds. evalNB (normDB d ds) = dbAsInt d + 2 * evalNB ds?
+demo = 
+Sean un d:DigBin y un ds:NBin cualquiera. Por principio de inducción sobre la estructura de ds::NBin
+caso base) ds = []
+¿evalNB (normDB d []) = dbAsInt d + 2 * evalNB []?
+caso ind.) ds = (d':ds')
+HI) ¡evalNB (normDB d ds') = dbAsInt d + 2 * evalNB ds'!
+TI) ¿evalNB (normDB d (d':ds')) = dbAsInt d + 2 * evalNB (d':ds')?
+
+Caso base:
+Análisis por casos sobre d::DigBin
+caso d = O
+Lado izquierdo:
+evalNB (normDB O [])
+= def de normDB.1
+evalNB []
+= def de evalNB.1
+0
+
+lado derecho:
+dbAsInt O + 2 * evalNB []
+= def de evalNB.1
+dbAsInt O + 2 * 0
+= por aritmética
+dbAsInt O
+= def de dbAsInt.1
+0
+
+
+caso d = I
+Lado izquierdo:
+evalNB (normDB I [])
+= def de normDB.2
+evalNB (I:[])
+= def de evalNB.2
+dbAsInt I + 2 * evalNB []
+
+lado derecho:
+dbAsInt I + 2 * evalNB []
+
+
+Caso recursivo:
+Lado izquierdo:
+evalNB (normDB d (d':ds'))
+= def de normDB.3
+evalNB (d:d':ds')
+= def de evalNB.2
+dbAsInt d + 2 * evalNB (d':ds')
+
+
+lado derecho:
+dbAsInt d + 2 * evalNB (d':ds')
+
+*Como no tuve que usar la HI para probar, asumo que no era necesario usar principio de inducción estructural. 
+Podría haber salido simplemente por casos.
+
+========================================================================================
+========================================================================================
+
+Me quedaron pendientes:
+
+ii. evalNB . succNB = (+1) . evalNB
+
+iii. para todo n1. para todo n2. evalNB (addNB n1 n2) = evalNB n1 + evalNB n2
+
+iv. nb2n . n2nb = id
+
+v. normalizarNB . normalizarNB = normalizarNB
+
+========================================================================================
+========================================================================================
+
+PARA REUTILIZAR EN LAS DISTINTAS DEMOS:
+
+caso base) n = []
+¿ ?
+caso ind.) n = (d:ds)
+HI) ¡ !
+TI) ¿ ?
+
+
+Caso base:
+Lado izquierdo:
+
+
+lado derecho:
+
+Caso recursivo:
+Lado izquierdo:
+
+
+lado derecho:
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+
+Sección III. Ejercicio 1.b.
+
+
+i. evalExpA . simplificarExpA = evalExpA
+demo = 
+Por principio de extensionalidad.
+¿para todo exp. (evalExpA . simplificarExpA) exp = evalExpA exp?
+Sea un exp::ExpA cualquiera. Por principio de inducción sobre la estructura de exp::ExpA
+caso base) exp = Cte n
+¿(evalExpA . simplificarExpA) (Cte n) = evalExpA (Cte n)?
+caso ind. 1) exp = Suma exp1 exp2
+HI1) ¡(evalExpA . simplificarExpA) exp1 = evalExpA exp1!
+HI2) ¡(evalExpA . simplificarExpA) exp2 = evalExpA exp2!
+TI) ¿(evalExpA . simplificarExpA) (Suma exp1 exp2) = evalExpA (Suma exp1 exp2)?
+caso ind. 2) exp = Prod exp1 exp2
+HI1) ¡(evalExpA . simplificarExpA) exp1 = evalExpA exp1!
+HI2) ¡(evalExpA . simplificarExpA) exp2 = evalExpA exp2!
+TI) ¿(evalExpA . simplificarExpA) (Prod exp1 exp2) = evalExpA (Prod exp1 exp2?)
+
+Caso base:
+Lado izquierdo:
+(evalExpA . simplificarExpA) (Cte n)
+= def de (.)
+evalExpA (simplificarExpA (Cte n))
+= def de simplificarExpA.1
+evalExpA (Cte n)
+
+lado derecho:
+evalExpA (Cte n)
+
+Caso recursivo 1:
+Lado izquierdo:
+(evalExpA . simplificarExpA) (Suma exp1 exp2)
+= def de (.)
+evalExpA (simplificarExpA (Suma exp1 exp2))
+= def de simplificarExpA.2
+evalExpA (eliminarSumaRedundante (simplificarExpA exp1) (simplificarExpA exp2))
+= por lema eval-eliminarSumaRedundante
+evalExpA (simplificarExpA exp1) + evalExpA (simplificarExpA exp2)
+
+lado derecho:
+evalExpA (Suma exp1 exp2)
+= def de evalExpA.2
+evalExpA exp1 + evalExpA exp2
+= por HI1
+(evalExpA . simplificarExpA) exp1 + evalExpA exp2
+= por HI2
+(evalExpA . simplificarExpA) exp1 + (evalExpA . simplificarExpA) exp2
+= def de (.)
+evalExpA (simplificarExpA exp1) + (evalExpA . simplificarExpA) exp2
+= def de (.)
+evalExpA (simplificarExpA exp1) + evalExpA (simplificarExpA exp2)
+
+Caso recursivo 2:
+Lado izquierdo:
+(evalExpA . simplificarExpA) (Prod exp1 exp2)
+= def de (.)
+evalExpA (simplificarExpA (Prod exp1 exp2))
+= def de simplificarExpA.3
+evalExpA (eliminarProdRedundante (simplificarExpA exp1) (simplificarExpA exp2))
+= por lema eval-eliminarProdRedundante
+evalExpA (simplificarExpA exp1) * evalExpA (simplificarExpA exp2)
+
+
+lado derecho:
+evalExpA (Prod exp1 exp2)
+= def de evalExpA.3
+evalExpA exp1 * evalExpA exp2
+= por HI1
+(evalExpA . simplificarExpA) exp1 * evalExpA exp2
+= por HI2
+(evalExpA . simplificarExpA) exp1 * (evalExpA . simplificarExpA) exp2
+= def de (.)
+evalExpA (simplificarExpA exp1) * (evalExpA . simplificarExpA) exp2
+= def de (.)
+evalExpA (simplificarExpA exp1) * evalExpA (simplificarExpA exp2)
+
+
+----------------
+Lema eval-eliminarSumaRedundante
+prop: ¿para toda exp1. para toda exp2. evalExpA (eliminarSumaRedundante exp1 exp2) = evalExpA exp1 + evalExpA exp2?
+demo = 
+Sean un exp1::ExpA y un exp2::ExpA. Se verá si evalExpA (eliminarSumaRedundante exp1 exp2) = evalExpA exp1 + evalExpA exp2
+Análisis por casos 
+Caso 1: exp1 = (Cte 0) y exp2 siendo cualquier ExpA
+
+Lado izquierdo:
+evalExpA (eliminarSumaRedundante (Cte 0) exp2)
+= def de eliminarSumaRedundante.1
+evalExpA exp2
+
+Lado derecho:
+evalExpA (Cte 0) + evalExpA exp2
+= def de evalExpA.1
+0 + evalExpA exp2
+= por aritmética
+evalExpA exp2
+
+
+Caso 2: exp2 = (Cte 0) y exp1 =/ (Cte 0)
+Lado izquierdo:
+evalExpA (eliminarSumaRedundante exp1 (Cte 0))
+= def de eliminarSumaRedundante.2
+evalExpA exp1
+
+Lado derecho:
+evalExpA exp1 + evalExpA (Cte 0)
+= def de evalExpA.1
+evalExpA exp1 + 0
+= por aritmética
+evalExpA exp1
+
+
+Caso 3: exp1 /= (Cte 0) y exp2 =/ (Cte 0)
+Lado izquierdo:
+evalExpA (eliminarSumaRedundante exp1 exp2)
+= def de eliminarSumaRedundante.3
+evalExpA (Suma exp1 exp2)
+= def de evalExpA.2
+evalExpA exp1 + evalExpA exp2
+
+Lado derecho:
+evalExpA exp1 + evalExpA exp2
+
+----------------
+Lema eval-eliminarProdRedundante
+prop: ¿para toda exp1. para toda exp2. evalExpA (eliminarProdRedundante exp1 exp2) = evalExpA exp1 * evalExpA exp2?
+*se resuelve de la misma forma que el lema anterior, pero con 5 casos en vez de 3.
+NO haría falta formularlo en la forma del 2do lema del ej. ii, o sea:
+para todo exp1. para todo exp2.
+       Si exp1 está simplificado, por lo que ... (propiedad)
+       y exp2 está simplificado, por lo que ... (propiedad)
+       entonces ... (prop)
+
+(¡¡este valdría para todo exp1 y exp2 sin condiciones!!)       
+
+========================================================================================
+========================================================================================
+
+ii. cantidadSumaCero . simplificarExpA = const 0
+demo = 
+Por principio de extensionalidad.
+¿para todo exp. (cantidadSumaCero . simplificarExpA) exp = const 0 exp?
+Sea un exp::ExpA cualquiera. Por principio de inducción sobre la estructura de exp::ExpA
+caso base) exp = Cte n
+¿(cantidadSumaCero . simplificarExpA) (Cte n) = const 0 (Cte n)?
+caso ind. 1) exp = Suma exp1 exp2
+HI1) ¡(cantidadSumaCero . simplificarExpA) exp1 = const 0 exp1!
+HI2) ¡(cantidadSumaCero . simplificarExpA) exp2 = const 0 exp2!
+TI) ¿(cantidadSumaCero . simplificarExpA) (Suma exp1 exp2) = const 0 (Suma exp1 exp2)?
+caso ind. 2) exp = Prod exp1 exp2
+HI1) ¡(cantidadSumaCero . simplificarExpA) exp1 = const 0 exp1!
+HI2) ¡(cantidadSumaCero . simplificarExpA) exp2 = const 0 exp2!
+TI) ¿(cantidadSumaCero . simplificarExpA) (Prod exp1 exp2) = const 0 (Prod exp1 exp2)?
+
+Caso base:
+Lado izquierdo:
+(cantidadSumaCero . simplificarExpA) (Cte n)
+= def de (.)
+cantidadSumaCero (simplificarExpA (Cte n))
+= def de simplificarExpA.1
+cantidadSumaCero (Cte n)
+= def de cantidadSumaCero.1
+0
+
+lado derecho:
+const 0 (Cte n)
+= def de const
+0
+
+
+Caso recursivo 1:
+Lado izquierdo:
+(cantidadSumaCero . simplificarExpA) (Suma exp1 exp2)
+= def de (.)
+cantidadSumaCero (simplificarExpA (Suma exp1 exp2))
+= def de simplificarExpA.2
+cantidadSumaCero (eliminarSumaRedundante (simplificarExpA exp1) (simplificarExpA exp2))
+= por lema cantSumaCero-eliminarSumaRedundante
+cantidadSumaCero (simplificarExpA exp1) + cantidadSumaCero (simplificarExpA exp2)
+= def de (.)
+(cantidadSumaCero . simplificarExpA) exp1 + cantidadSumaCero (simplificarExpA exp2)
+= def de (.)
+(cantidadSumaCero . simplificarExpA) exp1 + (cantidadSumaCero . simplificarExpA) exp2
+= por HI1
+const 0 exp1 + (cantidadSumaCero . simplificarExpA) exp2
+= por HI2
+const 0 exp1 + const 0 exp2
+= def de const
+0 + const 0 exp2
+= def de const
+0 + 0
+= por aritmética
+0
+
+lado derecho:
+const 0 (Suma exp1 exp2)
+= def de const
+0
+
+
+Caso recursivo 2:
+Lado izquierdo:
+(cantidadSumaCero . simplificarExpA) (Prod exp1 exp2)
+= def de (.)
+cantidadSumaCero (simplificarExpA (Prod exp1 exp2))
+= def de simplificarExpA.3
+cantidadSumaCero (eliminarProdRedundante (simplificarExpA exp1) (simplificarExpA exp2))
+= por lema cantSumaCero-eliminarProdRedundante
+cantidadSumaCero (simplificarExpA exp1) + cantidadSumaCero (simplificarExpA exp2)
+= por HI1
+const 0 exp1 + (cantidadSumaCero . simplificarExpA) exp2
+= por HI2
+const 0 exp1 + const 0 exp2
+= def de const
+0 + const 0 exp2
+= def de const
+0 + 0
+= por aritmética
+0
+
+lado derecho:
+const 0 (Prod exp1 exp2)
+= def de const
+0
+
+
+----------------
+lema cantSumaCero-eliminarSumaRedundante
+prop: ¿para todo exp1. para todo exp2. cantidadSumaCero (eliminarSumaRedundante exp1 exp2) = cantidadSumaCero exp1 + cantidadSumaCero exp2?
+demo = 
+Sean un exp1::ExpA y un exp2::ExpA. Se verá si cantidadSumaCero (eliminarSumaRedundante exp1 exp2) = cantidadSumaCero exp1 + cantidadSumaCero exp2
+Análisis por casos 
+
+Caso 1: exp1 = (Cte 0) y exp2 es cualquier ExpA
+Lado izquierdo:
+cantidadSumaCero (eliminarSumaRedundante (Cte 0) exp2)
+= def de eliminarSumaRedundante.1
+cantidadSumaCero exp2
+
+lado derecho:
+cantidadSumaCero (Cte 0) + cantidadSumaCero exp2
+= def de cantidadSumaCero.1
+0 + cantidadSumaCero exp2
+= por aritmética
+cantidadSumaCero exp2
+
+
+Caso 2: exp2 = (Cte 0) y exp1 =/ (Cte 0)
+Lado izquierdo:
+cantidadSumaCero (eliminarSumaRedundante exp1 (Cte 0))
+= def de eliminarSumaRedundante.2
+cantidadSumaCero exp1
+
+lado derecho:
+cantidadSumaCero exp1 + cantidadSumaCero (Cte 0)
+= def de cantidadSumaCero.1
+cantidadSumaCero exp1 + 0
+= por aritmética
+cantidadSumaCero exp1
+
+
+Caso 3: exp1 /= (Cte 0) y exp2 =/ (Cte 0)
+Lado izquierdo:
+cantidadSumaCero (eliminarSumaRedundante exp1 exp2)
+= def de eliminarSumaRedundante.3
+cantidadSumaCero (Suma exp1 exp2)
+= def cantidadSumaCero.2
+unoSiSumaCero exp1 exp2 + cantidadDeSumaCero exp1 + cantidadDeSumaCero exp2
+= def unoSiSumaCero.3
+0 + cantidadDeSumaCero exp1 + cantidadDeSumaCero exp2
+= por aritmética
+cantidadDeSumaCero exp1 + cantidadDeSumaCero exp2
+
+lado derecho:
+cantidadSumaCero exp1 + cantidadSumaCero exp2
+
+
+----------------
+lema cantSumaCero-eliminarProdRedundante
+prop: ¿para todo exp1. para todo exp2.
+       Si exp1 está simplificado, por lo que cantidadDeSumaCero exp1 = 0
+       y exp2 está simplificado, por lo que cantidadDeSumaCero exp2 = 0
+       entonces cantidadSumaCero (eliminarProdRedundante exp1 exp2) = cantidadSumaCero exp1 + cantidadSumaCero exp2?
+demo = 
+Sean un exp1::ExpA y un exp2::ExpA. Se verá si cantidadSumaCero (eliminarProdRedundante exp1 exp2) = cantidadSumaCero exp1 + cantidadSumaCero exp2
+Análisis por casos 
+
+Caso 1: exp1 = (Cte 0) y exp2 es cualquier ExpA
+Lado izquierdo:
+cantidadSumaCero (eliminarProdRedundante (Cte 0) exp2)
+= def de eliminarProdRedundante.1
+cantidadDeSumaCero (Cte 0)
+= def de cantidadDeSumaCero.1
+0
+
+lado derecho:
+cantidadSumaCero (Cte 0) + cantidadSumaCero exp2
+= def de cantidadDeSumaCero.1
+0 + cantidadSumaCero exp2
+= por propiedad conocida: cantidadDeSumaCero exp2 = 0
+0 + 0
+= por aritmética
+0
+
+
+Caso 2: exp2 = (Cte 0) y exp1 =/ (Cte 0)
+Lado izquierdo:
+cantidadSumaCero (eliminarProdRedundante exp1 (Cte 0))
+= def de eliminarProdRedundante.2
+cantidadSumaCero (Cte 0)
+= def de cantidadDeSumaCero.1
+0
+
+lado derecho:
+cantidadSumaCero exp1 + cantidadSumaCero (Cte 0)
+= def de cantidadDeSumaCero.1
+cantidadSumaCero exp1 + 0
+= por propiedad conocida: cantidadDeSumaCero exp1 = 0
+0 + 0
+= por aritmética
+0
+
+
+Caso 3: exp1 = (Cte 1) y exp2 =/ (Cte 0)
+Lado izquierdo:
+cantidadSumaCero (eliminarProdRedundante (Cte 1) exp2)
+= def de eliminarProdRedundante.3
+cantidadDeSumaCero exp2
+
+lado derecho:
+cantidadSumaCero (Cte 1) + cantidadSumaCero exp2
+= def de cantidadDeSumaCero.1
+0 + cantidadSumaCero exp2
+= por aritmética
+cantidadSumaCero exp2
+
+
+Caso 4: exp2 = (Cte 1) y exp1 =/ (Cte 0) && exp1 =/ (Cte 1)
+Lado izquierdo:
+cantidadSumaCero (eliminarProdRedundante exp1 (Cte 1))
+= def de eliminarProdRedundante.4
+cantidadSumaCero exp1
+
+lado derecho:
+cantidadSumaCero exp1 + cantidadSumaCero (Cte 1)
+= def de cantidadDeSumaCero.1
+cantidadSumaCero exp1 + 0
+= por aritmética
+cantidadSumaCero exp1 
+
+
+Caso 5: exp1 =/ (Cte 0) && exp1 =/ (Cte 1) y exp2 =/ (Cte 0) && exp2 =/ (Cte 1)
+Lado izquierdo:
+cantidadSumaCero (eliminarProdRedundante exp1 exp2)
+= def de eliminarProdRedundante.5
+cantidadDeSumaCero (Prod exp1 exp2)
+= def de cantidadDeSumaCero
+cantidadDeSumaCero exp1 + cantidadDeSumaCero exp2
+
+lado derecho:
+cantidadSumaCero exp1 + cantidadSumaCero exp2
+
+
+========================================================================================
+========================================================================================
+
+PARA REUTILIZAR EN LAS DISTINTAS DEMOS:
+
+caso base) exp = Cte n
+¿ ?
+caso ind. 1) exp = Suma exp1 exp2
+HI1) ¡ !
+HI2) ¡ !
+TI) ¿ ?
+caso ind. 2) exp = Prod exp1 exp2
+HI1) ¡ !
+HI2) ¡ !
+TI) ¿ ?
+
+
+Caso base:
+Lado izquierdo:
+
+
+lado derecho:
+
+Caso recursivo:
+Lado izquierdo:
+
+
+lado derecho:
+
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+========================================================================================
+
+*Lo de ExpS quedó sin hacer

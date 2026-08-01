@@ -1,0 +1,71 @@
+Sección I. Ejercicio 4.
+
+a. cantidadDeAceitunas Prepizza
+=​ por def de conDescripcionMejorada.1
+cantidadDeAceitunas(conDescripcionMejorada Prepizza)
+
+b. cantidadDeAceitunas (Capa Queso Prepizza)
+= por def de juntarAceitunas.2
+cantidadDeAceitunas (juntarAceitunas Queso Prepizza)
+= por def de conDescripcionMejorada.1
+cantidadDeAceitunas (juntarAceitunas Queso (conDescripcionMejorada​ Prepizza))
+=​ por def de conDescripcionMejorada.2
+cantidadDeAceitunas (conDescripcionMejorada (Capa Queso Prepizza))
+
+c. cantidadDeAceitunas (Capa (Aceitunas 8) (Capa Queso Prepizza))
+= por def de juntarAceitunas.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 8) (Capa Queso Prepizza))
+= por def de juntarAceitunas.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 8) (juntarAceitunas Queso Prepizza))
+= por def de conDescripcionMejorada.1
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 8) (juntarAceitunas Queso (conDescripcionMejorada​ Prepizza)))
+=​ por def de conDescripcionMejorada.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 8) (conDescripcionMejorada​ (Capa Queso Prepizza)))
+=​ por def de conDescripcionMejorada.2
+cantidadDeAceitunas (conDescripcionMejorada (Capa (Aceitunas 8) (Capa Queso Prepizza)))
+
+d. cantidadDeAceitunas (Capa (Aceitunas 9) (Capa (Aceitunas 8) (Capa Queso Prepizza)))
+= por def de cantidadDeAceitunas.2
+cantAceitunas (Aceitunas 9) + cantidadDeAceitunas​ (Capa (Aceitunas 8) (Capa Queso Prepizza))
+= por def de cantAceitunas.1
+9 + cantidadDeAceitunas​ (Capa (Aceitunas 8) (Capa Queso Prepizza))
+= por def de cantidadDeAceitunas.2
+9 + cantAceitunas (Aceitunas 8) + cantidadDeAceitunas​ (Capa Queso Prepizza)
+= por def de cantAceitunas.1
+9 + 8 + cantidadDeAceitunas​ (Capa Queso Prepizza)
+= por def de cantidadDeAceitunas.2
+9 + 8 + cantAceitunas Queso + cantidadDeAceitunas​ Prepizza
+= por def de cantAceitunas.2
+9 + 8 + 0 + cantidadDeAceitunas​ Prepizza
+= por def de cantidadDeAceitunas.1
+9 + 8 + 0 + 0
+= por aritmética
+17
+= por aritmética
+17 + 0 + 0
+= por def de cantidadDeAceitunas.1
+17 + 0 + cantidadDeAceitunas​ Prepizza
+= por def de cantAceitunas.2
+17 + cantAceitunas Queso + cantidadDeAceitunas​ Prepizza
+= por def de cantidadDeAceitunas.2
+17 + (cantidadDeAceitunas​ (Capa Queso Prepizza))
+= por def de cantAceitunas.1
+cantAceitunas (Aceitunas 17) + cantidadDeAceitunas​ (Capa Queso Prepizza)
+= por def de cantidadDeAceitunas.2
+cantidadDeAceitunas (Capa (Aceitunas 17) (Capa Queso Prepizza))
+=​ por aritmética
+cantidadDeAceitunas (Capa (Aceitunas 9+8) (Capa Queso Prepizza))
+=​ por def de juntarAceitunas.1
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 9) (Capa (Aceitunas 8) (Capa Queso Prepizza)))
+=​ por def de juntarAceitunas.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 9) (juntarAceitunas (Aceitunas 8) (Capa Queso Prepizza)))
+=​ por def de juntarAceitunas.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 9) (juntarAceitunas (Aceitunas 8) (juntarAceitunas Queso Prepizza)))
+=​ por def de conDescripcionMejorada.1
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 9) (juntarAceitunas (Aceitunas 8) (juntarAceitunas Queso (conDescripcionMejorada​ Prepizza))))
+=​ por def de conDescripcionMejorada.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 9) (juntarAceitunas (Aceitunas 8) (conDescripcionMejorada​ (Capa Queso Prepizza))))
+=​ por def de conDescripcionMejorada.2
+cantidadDeAceitunas (juntarAceitunas (Aceitunas 9) (conDescripcionMejorada​ (Capa (Aceitunas 8) (Capa Queso Prepizza))))
+=​ por def de conDescripcionMejorada.2
+cantidadDeAceitunas (conDescripcionMejorada (Capa (Aceitunas 9) (Capa (Aceitunas 8) (Capa Queso Prepizza))))
